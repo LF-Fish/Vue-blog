@@ -1,5 +1,6 @@
 # myblog
-
+## 基于Vue.js的个人博客
+### 技术栈主要包括```Vue```,```Vuex```,```axios```,```Vue Router```,```Less```。
 ## Project setup
 ```
 npm install
