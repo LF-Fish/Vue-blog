@@ -1,26 +1,55 @@
  <template>
   <!-- 左边内容 -->
-  <el-container>
+  <el-container
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.5)"
+  >
     <el-aside>
+      <!-- 文章分类 -->
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>标签</span>
+          <span>文章分类</span>
         </div>
         <div class="tag">
-          <el-tag
-            v-for="(item, index) in items"
+          <el-button
+            plain
+            v-for="(item, index) in AllArticleClassName"
             :key="index"
-            type="info"
-            effect="plain"
+            size="small"
+            @click="tagEvent"
           >
-            {{ item }}
-          </el-tag>
+            {{ item.classname }}
+          </el-button>
+        </div>
+      </el-card>
+
+      <!-- 博客信息 -->
+      <el-card class="box-card" style="margin-top: 30px">
+        <div slot="header" class="clearfix">
+          <span><i class="el-icon-coffee"></i>博客信息</span>
+        </div>
+        <div class="ItemList">
+          <span class="left">
+            <i class="el-icon-coffee-cup"></i>
+            文章总数
+          </span>
+          <span> {{ $store.state.count }}篇 </span>
+        </div>
+        <div class="ItemList">
+          <span class="left">
+            <i class="el-icon-goblet"></i>
+            运行天数
+          </span>
+          <span> 3天 </span>
         </div>
       </el-card>
     </el-aside>
 
     <!-- 中间主要内容 -->
     <el-main>
+      <!-- <div v-loading.fullscreen.lock="loading"></div> -->
       <!-- 搜索框 -->
       <div class="search">
         <el-input
@@ -33,17 +62,52 @@
       </div>
 
       <!-- 文章页 -->
-      <!-- <div class="artical"> -->
-      <el-card class="box-card" shadow="hover" :body-style="{ width: '100%' }">
+
+      <el-card
+        class="box-card"
+        shadow="hover"
+        :body-style="{ width: '100%' }"
+        v-for="(item, index) in AllArticle"
+        :key="index"
+      >
+        <div slot="header" class="clearfix">
+          <router-link :to="{ name: 'Detail', params: { id: item.id } }">
+            <h3>{{ item.title }}</h3>
+            <p class="el-icon-time">{{ item.create_time }}</p>
+            <div class="tag">
+              <!-- <el-tag type="danger">{{ item.class_name01 }}</el-tag> -->
+              <el-tag v-if="item.class_name01" type="danger">{{
+                item.class_name01
+              }}</el-tag>
+              <el-tag v-if="item.class_name02" type="danger">{{
+                item.class_name02
+              }}</el-tag>
+              <el-tag v-if="item.class_name03" type="danger">{{
+                item.class_name03
+              }}</el-tag>
+            </div>
+          </router-link>
+        </div>
+        <!-- @click="GotoArticleDetail(item.id)" -->
+        <div class="text item">
+          {{ item.content }}
+        </div>
+        <p class="hot">
+          <span class="el-icon-thumb">点赞({{ item.like_count }})</span>
+          <span class="el-icon-view">阅读(100)</span>
+        </p>
+      </el-card>
+
+      <!-- <el-card class="box-card" shadow="hover">
         <div slot="header" class="clearfix">
           <h3>文章标题</h3>
           <p class="el-icon-time">2020-01-22</p>
           <div class="tag">
             <el-tag type="danger">JavaScript</el-tag>
             <el-tag type="danger">VUE</el-tag>
-            <el-tag type="danger">CSS</el-tag>
           </div>
         </div>
+
         <div class="text item">
           User 组件，对于所有 ID 各不相同的用户，都要使
           用这个组件来渲feefwrgu而非呼唤v都v回复给施工队染。那么，我们可以在
@@ -54,39 +118,20 @@
           <span class="el-icon-thumb">点赞(1)</span>
           <span class="el-icon-view">阅读(100)</span>
         </p>
-      </el-card>
-
-      <el-card class="box-card" shadow="hover">
-        <div slot="header" class="clearfix">
-          <h3>文章标题</h3>
-          <p class="el-icon-time">2020-01-22</p>
-          <div class="tag">
-            <el-tag type="danger">JavaScript</el-tag>
-            <el-tag type="danger">VUE</el-tag>
-          </div>
-        </div>
-
-        <div class="text item">
-          User 组件，对于所有 ID 各不相同的用户，都要使
-          用这个组件来渲feefwrgu而非呼唤v都v回复给施工队染。那么，我们可以在
-          vue-router 的路由路径中使用“动态路径参数”(dynamic segment)
-          来达到这个效果：
-        </div>
-        <p class="hot">
-          <span class="el-icon-thumb">点赞(1)</span>
-          <span class="el-icon-view">阅读(100)</span>
-        </p>
-      </el-card>
+      </el-card> -->
       <!-- </div> -->
 
       <!-- 分页 -->
       <div class="block">
-        <span class="demonstration">共1页</span>
+        <!-- <span class="demonstration" style="padding-left: 10px"
+          >共{{ count/pageSize }}页</span
+        > -->
         <el-pagination
-          :current-page.sync="currentPage3"
-          :page-size="5"
+          :current-page.sync="currentPage"
+          :page-size="pageSize"
           layout="prev, pager, next, jumper"
-          :total="3"
+          :total="count"
+          @current-change="indexChange"
         >
         </el-pagination>
       </div>
@@ -98,25 +143,92 @@
 export default {
   data() {
     return {
+      loading: true,
       items: ["性能优化", "vue", "CSS", "JavaScript"],
       input: "",
-      currentPage3: 1,
+      currentPage: 1,
+      // 总文章数
+      count: 0,
+      // 总标签数
+      tagCount: 0,
+      // 文章列表
+      AllArticle: [],
+      // 点赞数量数组
+      likes: [],
+      // 所以文章分类
+      AllArticleClassName: [],
+      pageSize: 3,
+      // total: 3,
     };
+  },
+  created() {
+    this.GetAllArticle(this.currentPage, this.pageSize);
+  },
+  methods: {
+    GotoArticleDetail(id) {
+      console.log(id);
+      this.$router.push({ name: "Detail", params: { id } });
+    },
+    indexChange(index) {
+      this.GetAllArticle(index, this.pageSize);
+    },
+    tagEvent() {
+      console.log("点击标签");
+    },
+    // 获取全部文章
+    async GetAllArticle(curPage, pageSize) {
+      let res = await this.$http.get("/api/article/typeList", {
+        params: { curPage: curPage, pageSize: pageSize },
+      });
+      console.log(res);
+
+      this.AllArticle = res.data.data;
+      this.count = res.data.coust;
+      this.$store.commit("setCount", this.count);
+
+      // 截取时间
+      this.AllArticle.map((item) => {
+        item.create_time = item.create_time.split(" ")[0];
+      });
+      this.GetAllArticleClassName();
+      this.loading = false;
+    },
+
+    // 获取全部文章标签
+    async GetAllArticleClassName() {
+      let res = await this.$http.get("/api/article/classify");
+
+      this.AllArticleClassName = res.data.data;
+      console.log(res);
+      // 去除空字符
+      for (var i = 0; i < this.AllArticleClassName.length; i++) {
+        if (this.AllArticleClassName[i].classname == "") {
+          this.AllArticleClassName.splice(i, 1);
+          i = i - 1;
+        }
+      }
+      this.tagCount = this.AllArticleClassName.length;
+      this.$store.commit("setTagCount", this.tagCount);
+    },
   },
 };
 </script>
 
 <style lang="less">
 #app {
-  
+  .el-loading-spinner {
+    i {
+      color: rgb(219, 165, 183);
+    }
+    p {
+      color: rgb(219, 165, 183);
+    }
+  }
   .el-container {
-//      background: linear-gradient(to right, #ccc 1px, transparent 1px),
-//     linear-gradient(to bottom, rgba(238, 234, 234, 0.932) 1px, transparent 1px);
-//   background-repeat: repeat; /* 默认为 repeat */
-//   background-size: 10px 10px;
     .el-aside {
-      margin: 30px 30px;
-      // margin-right: 30px;
+      padding: 30px 30px;
+      padding-left: 0;
+      box-sizing: content-box;
       .box-card {
         width: 290px;
         .el-card__header {
@@ -127,16 +239,54 @@ export default {
         }
         .tag {
           display: flex;
-          justify-content: space-around;
+          // justify-content: space-between;
+          flex-wrap: wrap;
+          .el-button {
+            margin-right: 10px;
+            margin-bottom: 5px;
+            margin-left: 0;
+          }
+          .is-plain:hover {
+            background: #fff;
+            border-color: brown;
+            color: brown;
+          }
+          .is-plain:focus {
+            background: brown;
+            border-color: brown;
+            color: #fff;
+          }
+        }
+
+        .ItemList {
+          padding: 10px 10px;
+          cursor: pointer;
+          color: #555;
+          border-bottom: 1px solid #ebeef5;
+          transition: all 0.6s;
+          font-size: 13px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .ItemList:hover {
+          background: #f3f4f5;
+          color: #909399;
+          padding-left: 10px;
+        }
+        .ItemList:last-child {
+          border-bottom: none;
         }
       }
     }
     .el-main {
-      background-color: white;
+      background: rgba(255, 255, 255, 0.829);
       margin: 30px 0;
-      padding: 0 80px;
+      padding-left: 100px;
+      box-sizing: content-box;
       padding-bottom: 20px;
       border-left: 1px dashed rgb(201, 201, 201);
+      overflow: unset;
       .search {
         margin-left: 80px;
         width: 300px;
@@ -149,11 +299,20 @@ export default {
 
       .box-card {
         margin-bottom: 30px;
-        width: 500px;
+        width: 480px;
+        border-left: 1px dashed rgb(201, 201, 201);
         .el-card__header {
           width: 100%;
-        }
+          a {
+            text-decoration: none;
+            color: #606266;
+          }
 
+          .router-link-active {
+            text-decoration: none;
+            color: #606266;
+          }
+        }
         h3 {
           margin: 0;
           margin-top: 10px;
@@ -189,12 +348,32 @@ export default {
           }
         }
       }
+      .el-pagination {
+        .btn-prev {
+          color: #8a8a8a;
+        }
+        .btn-next {
+          color: #8a8a8a;
+        }
+      }
       .el-pager li.active {
         color: rgb(219, 165, 183);
       }
       .el-pager li {
         color: #8a8a8a;
       }
+    }
+    .el-main ::before,
+    .box-card ::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      filter: blur(20px);
+      z-index: -1;
+      margin: -30px;
     }
   }
 }
