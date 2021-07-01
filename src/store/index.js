@@ -10,7 +10,6 @@ export default new Vuex.Store({
     //  isSignIn 登录状态，0为未登录
     isSignIn: 0,
     token: '',
-    userName:''
 
   },
   mutations: {
@@ -26,9 +25,6 @@ export default new Vuex.Store({
     setTagCount(state, val) {
       state.tagCount = val
     },
-    setUserName(state,val){
-      state.userName = val
-    }
   },
   actions: {
   },

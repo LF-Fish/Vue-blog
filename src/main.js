@@ -6,6 +6,8 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import animated from 'animate.css'
 import mavonEditor from 'mavon-editor'  //引入mavon-editor 就是上面所安装的
+import "mavon-editor/dist/css/index.css";
+import 'wowjs/css/libs/animate.css'
 
 import setAxios from './network/index.js'
 setAxios()

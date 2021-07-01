@@ -29,11 +29,12 @@
       <el-menu-item index="/">归档</el-menu-item>
       <el-menu-item index="/book">书单</el-menu-item>
       <el-menu-item index="/about">关于我</el-menu-item>
-      <el-menu-item index="/github"
+      <el-menu-item index
         ><a href="https://github.com/LF-Fish" target="_blank"
           >GitHub</a
         ></el-menu-item>
         <el-menu-item index="/log">登录/注册</el-menu-item>
+        <el-menu-item index="/article" v-if="username=='123'">管理员</el-menu-item>
     </el-menu>
   </div>
 
@@ -50,11 +51,13 @@
 </template>
 
 <script>
+import Cookie from "js-cookie";
 export default {
   data() {
     return {
       headImg: "../assets/headImg.JPG",
       activeIndex: "/",
+      username:Cookie.get('username')
     };
   },
   methods: {
@@ -76,7 +79,7 @@ export default {
     animation-duration: 0.5s;
   }
   .header {
-    width: 1100px;
+    width: 1200px;
     margin: auto;
     .banner {
       border-radius: 10px;
@@ -115,6 +118,7 @@ export default {
       }
     }
     .el-menu-demo {
+      padding-right: 0;
       border-radius: 8px;
       width: 100%;
       margin: auto;
@@ -124,6 +128,9 @@ export default {
       border-top: solid 1px #e6e6e6;
       a {
         text-decoration: none;
+      }
+      .el-menu-item{
+        font-size: 16px;
       }
     }
 

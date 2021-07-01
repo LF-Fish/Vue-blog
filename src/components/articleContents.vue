@@ -3,11 +3,13 @@
     <div class="articleBody">
       <!-- 文章头 -->
       <div class="header">
-        <h1>{{data.title}}</h1>
+        <h1>{{ data.title }}</h1>
         <div class="info">
-          <span class="el-icon-time"> 发表时间:{{data.create_time | timer()}} </span>
-          <span class="el-icon-view">阅读({{data.visited}})</span>
-          <span class="icon el-icon-thumb">点赞({{data.like_count}})</span>
+          <span class="el-icon-time">
+            发表时间:{{ data.create_time | timer() }}
+          </span>
+          <span class="el-icon-view">阅读({{ data.visited }})</span>
+          <span class="icon el-icon-thumb">点赞({{ data.like_count }})</span>
         </div>
       </div>
 
@@ -28,35 +30,37 @@
 </template>
 
 <script>
-  export default {
-    props:['data','loading'],
-    filters:{
-      timer(str){
-        if(str != null)
-        return str.substring(0,10);
-        else
-        return ""
-      },
+export default {
+  props: ["data", "loading"],
+  filters: {
+    timer(str) {
+      if (str != null) return str.substring(0, 10);
+      else return "";
     },
-    created(){
-      console.log(this.data);
-    }
-  }
+  },
+  data() {
+    return {
+      navTree: [],
+    };
+  },
+  methods: {},
+};
 </script>
 
 <style lang="less">
 .contents {
   margin-top: 20px;
-  width: 750px;
+  width: 1000px;
   background-color: #fff;
-  .articleBody{
+  .articleBody {
     padding: 10px 20px;
-    .header{
+    .header {
       padding-bottom: 20px;
-      h1{
+      width: 100%;
+      h1 {
         font-size: 36px;
       }
-      span{
+      span {
         font-size: 14px;
         color: #999;
         margin-right: 20px;

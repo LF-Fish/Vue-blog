@@ -33,7 +33,7 @@
             <el-button
               class="delete"
               type="text"
-              v-if="$store.state.userName === '罗废鱼'"
+              v-if="username === '123'"
               @click="handleDelect(item.id)"
               >删除</el-button
             >
@@ -64,6 +64,7 @@ export default {
       textarea: "",
       commentArray: [],
       isEmpty: false,
+      username :Cookie.get("username")
     };
   },
   methods: {
@@ -129,7 +130,6 @@ export default {
             content: this.textarea,
             // 有则发送文章id，无则发送0
             article_id: this.articleId ? this.articleId : 0,
-            username: Cookie.get("username"),
           })
           .then((res) => {
             this.GetArticleComment();

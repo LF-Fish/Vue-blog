@@ -1,8 +1,12 @@
 <template>
-  <div>
+  <div class="main">
     <div class="left">
       <!-- 文章内容 -->
-      <article-contents :data="data" :v-loading="loading"></article-contents>
+      <article-contents
+        id="article"
+        :data="data"
+        :v-loading="loading"
+      ></article-contents>
       <!-- 评论区 -->
       <comment :articleId="id" id="comment"></comment>
       <!-- 左边 点赞、评论 -->
@@ -17,7 +21,14 @@
       </div>
       <el-backtop></el-backtop>
     </div>
-    <div class="right"></div>
+    <!-- <div class="right">
+      <div class="navi-floder">
+        <div class="navi-floder-title">文章目录</div>
+        <div class="catalog">
+          <side-catalog class="catalog" v-bind="catalogProps"></side-catalog>
+        </div>
+      </div>
+    </div> -->
   </div>
 </template>
 
@@ -25,10 +36,14 @@
 import articleContents from "../components/articleContents.vue";
 import comment from "../components/comment.vue";
 import Cookie from "js-cookie";
+import SideCatalog from "vue-side-catalog";
+import "vue-side-catalog/lib/vue-side-catalog.css";
+
 export default {
   components: {
     articleContents,
     comment,
+    SideCatalog,
   },
   provide() {
     return {
@@ -43,10 +58,15 @@ export default {
       changeStyle: false,
       isClick: true,
       loading: true,
+      catalog: [],
+      catalogProps: {
+        container: ".left",
+      },
     };
   },
   created() {
     this.GetArticleDetail();
+    // this.generate_catalog();
   },
   methods: {
     async GetArticleDetail() {
@@ -84,18 +104,54 @@ export default {
     toComment() {
       document.querySelector("#comment").scrollIntoView(true);
     },
+    // 生成目录
+    generate_catalog() {
+      // 保证渲染成功
+      this.$nextTick(() => {
+        // const article_content = this.$refs["article"];
+        const article_content = document
+          .querySelector(".article")
+          .getElementsByTagName("a");
+        console.log(article_content);
+        // const nodes = ["H1", "H2", "H3"];
+        // let titles = [];
+        // var children = document.getElementsByClassName("catalog")  //获取子节点
+        // article_content.forEach((e, index) => {
+        //   children.appendchild(e)
+        //   // if (nodes.includes(e.nodeName)) {
+        //   //   const id = "_" + index;
+        //   //   e.setAttribute("id", id);
+        //   //   titles.push({
+        //   //     id: id,
+        //   //     title: e.innerHTML,
+        //   //     level: Number(e.nodeName.substring(1, 2)),
+        //   //     nodeName: e.nodeName,
+        //   //   });
+        //   // }
+
+        // });
+        this.catalog = article_content;
+      });
+    },
   },
-  // watch: {
-  //   likeCount(val) {
-  //     return this.data.like_count;
-  //   },
-  // },
 };
 </script>
 
 <style lang="less">
+.main {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+}
 .left {
   background-color: #fff;
+}
+.right {
+  margin-left: 30px;
+  width: 270px;
+  .el-tag {
+    margin-right: 10px;
+  }
 }
 .suspended {
   position: fixed;

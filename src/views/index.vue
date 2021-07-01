@@ -1,12 +1,8 @@
  <template>
   <!-- 左边内容 -->
-  <el-container
-    v-loading="loading"
-    element-loading-text="拼命加载中"
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(0, 0, 0, 0.5)"
-  >
+  <el-container>
     <el-aside>
+      <div class="wow slideInLeft">
       <!-- 文章分类 -->
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -18,7 +14,7 @@
             v-for="(item, index) in AllArticleClassName"
             :key="index"
             size="small"
-            @click="tagEvent"
+            @click="tagEvent(item.classname)"
           >
             {{ item.classname }}
           </el-button>
@@ -35,7 +31,7 @@
             <i class="el-icon-coffee-cup"></i>
             文章总数
           </span>
-          <span> {{ $store.state.count }}篇 </span>
+          <span> {{ count }}篇 </span>
         </div>
         <div class="ItemList">
           <span class="left">
@@ -45,11 +41,11 @@
           <span> 3天 </span>
         </div>
       </el-card>
+      </div>
     </el-aside>
 
     <!-- 中间主要内容 -->
-    <el-main>
-      <!-- <div v-loading.fullscreen.lock="loading"></div> -->
+    <el-main class="wow slideInRight">
       <!-- 搜索框 -->
       <div class="search">
         <el-input
@@ -57,6 +53,8 @@
           placeholder="请输入文章名进行输入"
           suffix-icon="el-icon-search"
           v-model="input"
+          debounce
+          @keyup.enter.native="search(input)"
         >
         </el-input>
       </div>
@@ -98,35 +96,13 @@
         </p>
       </el-card>
 
-      <!-- <el-card class="box-card" shadow="hover">
-        <div slot="header" class="clearfix">
-          <h3>文章标题</h3>
-          <p class="el-icon-time">2020-01-22</p>
-          <div class="tag">
-            <el-tag type="danger">JavaScript</el-tag>
-            <el-tag type="danger">VUE</el-tag>
-          </div>
-        </div>
-
-        <div class="text item">
-          User 组件，对于所有 ID 各不相同的用户，都要使
-          用这个组件来渲feefwrgu而非呼唤v都v回复给施工队染。那么，我们可以在
-          vue-router 的路由路径中使用“动态路径参数”(dynamic segment)
-          来达到这个效果：
-        </div>
-        <p class="hot">
-          <span class="el-icon-thumb">点赞(1)</span>
-          <span class="el-icon-view">阅读(100)</span>
-        </p>
-      </el-card> -->
-      <!-- </div> -->
-
       <!-- 分页 -->
       <div class="block">
         <!-- <span class="demonstration" style="padding-left: 10px"
           >共{{ count/pageSize }}页</span
         > -->
         <el-pagination
+          v-if="isShow == true"
           :current-page.sync="currentPage"
           :page-size="pageSize"
           layout="prev, pager, next, jumper"
@@ -140,11 +116,10 @@
 </template>
  
 <script>
+import WOW from "wowjs";
 export default {
   data() {
     return {
-      loading: true,
-      items: ["性能优化", "vue", "CSS", "JavaScript"],
       input: "",
       currentPage: 1,
       // 总文章数
@@ -159,12 +134,38 @@ export default {
       AllArticleClassName: [],
       pageSize: 3,
       // total: 3,
+      isShow: true,
     };
+  },
+  watch: {
+    key(val) {
+      alert(val);
+    },
   },
   created() {
     this.GetAllArticle(this.currentPage, this.pageSize);
   },
+  mounted() {
+    let wow = new WOW.WOW({
+      boxClass: "wow",
+      animateClass: "animated",
+      offset: 0,
+      mobile: true,
+      live: false,
+    });
+    wow.init();
+  },
   methods: {
+    // 搜索文章
+     async search(input){
+      let res = await this.$http.get("/api/article/typeList")
+      let list = res.data.data
+      this.AllArticle = list.filter((item)=>{
+       return item.title.indexOf(input) > -1
+      })
+      this.isShow = false
+      console.log(this.AllArticle)
+    },
     GotoArticleDetail(id) {
       console.log(id);
       this.$router.push({ name: "Detail", params: { id } });
@@ -172,26 +173,33 @@ export default {
     indexChange(index) {
       this.GetAllArticle(index, this.pageSize);
     },
-    tagEvent() {
-      console.log("点击标签");
+    async tagEvent(key) {
+      this.key = key;
+      this.GetAllArticle();
+      this.isShow = false;
     },
     // 获取全部文章
     async GetAllArticle(curPage, pageSize) {
-      let res = await this.$http.get("/api/article/typeList", {
-        params: { curPage: curPage, pageSize: pageSize },
-      });
-      console.log(res);
-
-      this.AllArticle = res.data.data;
-      this.count = res.data.coust;
-      this.$store.commit("setCount", this.count);
+      if (this.key) {
+        var res = await this.$http.get("/api/article/list/Singleclassify", {
+          params: { classname: this.key },
+        });
+        this.AllArticle = res.data.data.list
+      } else {
+        var res = await this.$http.get("/api/article/typeList", {
+          params: { curPage: curPage, pageSize: pageSize },
+        });
+        this.AllArticle = res.data.data;
+        this.count = res.data.coust;
+        this.$store.commit("setCount", this.count);
+        console.log(res);
+      }
 
       // 截取时间
       this.AllArticle.map((item) => {
-        item.create_time = item.create_time.split(" ")[0];
+        item.create_time = item.create_time.slice(0, 10);
       });
       this.GetAllArticleClassName();
-      this.loading = false;
     },
 
     // 获取全部文章标签
