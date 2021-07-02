@@ -3,44 +3,44 @@
   <el-container>
     <el-aside>
       <div class="wow slideInLeft">
-      <!-- 文章分类 -->
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>文章分类</span>
-        </div>
-        <div class="tag">
-          <el-button
-            plain
-            v-for="(item, index) in AllArticleClassName"
-            :key="index"
-            size="small"
-            @click="tagEvent(item.classname)"
-          >
-            {{ item.classname }}
-          </el-button>
-        </div>
-      </el-card>
+        <!-- 文章分类 -->
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>文章分类</span>
+          </div>
+          <div class="tag">
+            <el-button
+              plain
+              v-for="(item, index) in AllArticleClassName"
+              :key="index"
+              size="small"
+              @click="tagEvent(item.classname)"
+            >
+              {{ item.classname }}
+            </el-button>
+          </div>
+        </el-card>
 
-      <!-- 博客信息 -->
-      <el-card class="box-card" style="margin-top: 30px">
-        <div slot="header" class="clearfix">
-          <span><i class="el-icon-coffee"></i>博客信息</span>
-        </div>
-        <div class="ItemList">
-          <span class="left">
-            <i class="el-icon-coffee-cup"></i>
-            文章总数
-          </span>
-          <span> {{ count }}篇 </span>
-        </div>
-        <div class="ItemList">
-          <span class="left">
-            <i class="el-icon-goblet"></i>
-            运行天数
-          </span>
-          <span> 3天 </span>
-        </div>
-      </el-card>
+        <!-- 博客信息 -->
+        <el-card class="box-card" style="margin-top: 30px">
+          <div slot="header" class="clearfix">
+            <span><i class="el-icon-coffee"></i>博客信息</span>
+          </div>
+          <div class="ItemList">
+            <span class="left">
+              <i class="el-icon-coffee-cup"></i>
+              文章总数
+            </span>
+            <span> {{ count }}篇 </span>
+          </div>
+          <div class="ItemList">
+            <span class="left">
+              <i class="el-icon-goblet"></i>
+              运行天数
+            </span>
+            <span> {{ runDays }}天 </span>
+          </div>
+        </el-card>
       </div>
     </el-aside>
 
@@ -133,8 +133,9 @@ export default {
       // 所以文章分类
       AllArticleClassName: [],
       pageSize: 3,
-      // total: 3,
       isShow: true,
+      // 博客运行时间
+      runDays: 0,
     };
   },
   watch: {
@@ -154,17 +155,20 @@ export default {
       live: false,
     });
     wow.init();
+    let now = new Date().valueOf();
+    let nTime = now - 1617374874293;
+    this.runDays = Math.floor(nTime / 86400000);
   },
   methods: {
     // 搜索文章
-     async search(input){
-      let res = await this.$http.get("/api/article/typeList")
-      let list = res.data.data
-      this.AllArticle = list.filter((item)=>{
-       return item.title.indexOf(input) > -1
-      })
-      this.isShow = false
-      console.log(this.AllArticle)
+    async search(input) {
+      let res = await this.$http.get("/api/article/typeList");
+      let list = res.data.data;
+      this.AllArticle = list.filter((item) => {
+        return item.title.indexOf(input) > -1;
+      });
+      this.isShow = false;
+      console.log(this.AllArticle);
     },
     GotoArticleDetail(id) {
       console.log(id);
@@ -184,7 +188,7 @@ export default {
         var res = await this.$http.get("/api/article/list/Singleclassify", {
           params: { classname: this.key },
         });
-        this.AllArticle = res.data.data.list
+        this.AllArticle = res.data.data.list;
       } else {
         var res = await this.$http.get("/api/article/typeList", {
           params: { curPage: curPage, pageSize: pageSize },

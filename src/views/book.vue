@@ -1,6 +1,6 @@
 <template>
   <div id="book">
-    <div class="masonry wow slideInLeft">
+    <div class="masonry wow wow fadeInUp">
       <div class="item" v-for="(item, index) in bookList" :key="index">
         <div class="bookImg">
           <img :src="item.pic_url" />
@@ -69,6 +69,7 @@ export default {
     transition: all 0.5s ease;
     border-right: 1px dashed #c9c9c9;
     padding: 10px;
+    padding-top: 20px;
     width: 100%;
     break-inside: avoid;
     margin-bottom: 30px;
@@ -96,7 +97,7 @@ export default {
       width: 80%;
     }
     &:hover {
-      padding-top: 0;
+      padding-top: 10px;
       padding-bottom: 20px;
     }
   }

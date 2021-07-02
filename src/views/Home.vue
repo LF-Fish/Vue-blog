@@ -1,53 +1,56 @@
 <template>
-<div>
-  <!-- 封面 -->
-  <div class="header">
-    <div class="banner">
-      <!-- 头像 -->
-      <div class="headImg">
-        <el-image :src="require('@/assets/default.jpg')"></el-image>
-        <p>罗废鱼</p>
-        <!-- <div class="info">
-          <span>文章{{$store.state.count}}</span>
-          <span>标签{{$store.state.tagCount}}</span>
-        </div> -->
+  <div>
+    <!-- 封面 -->
+    <div class="header">
+      <div class="banner">
+        <!-- 头像 -->
+        <div class="headImg wow fadeInUp">
+          <el-avatar
+            :src="require('@/assets/avatar.jpg')"
+            fit="fill"
+            shape="circle"
+          ></el-avatar>
+          <p>罗废鱼</p>
+        </div>
       </div>
-    </div>
-    <!-- 导航栏 -->
-    <el-menu
-      :default-active="$route.path"
-      class="el-menu-demo"
-      mode="horizontal"
-      @select="handleSelect"
-      active-text-color="rgb(219, 165, 183)"
-      router
-    >
-      <el-image
-        style="width: 30px; height: 30px"
-        :src="require('@/assets/nav.png')"
-      ></el-image>
-      <el-menu-item index="/">归档</el-menu-item>
-      <el-menu-item index="/book">书单</el-menu-item>
-      <el-menu-item index="/about">关于我</el-menu-item>
-      <el-menu-item index
-        ><a href="https://github.com/LF-Fish" target="_blank"
-          >GitHub</a
-        ></el-menu-item>
+      <!-- 导航栏 -->
+      <el-menu
+        :default-active="$route.path"
+        class="el-menu-demo"
+        mode="horizontal"
+        @select="handleSelect"
+        active-text-color="rgb(219, 165, 183)"
+        router
+      >
+        <el-image
+          style="width: 30px; height: 30px"
+          :src="require('@/assets/nav.png')"
+        ></el-image>
+        <el-menu-item index="/">归档</el-menu-item>
+        <el-menu-item index="/book">书单</el-menu-item>
+        <el-menu-item index="/about">关于我</el-menu-item>
+        <el-menu-item index
+          ><a href="https://github.com/LF-Fish" target="_blank"
+            >GitHub</a
+          ></el-menu-item
+        >
         <el-menu-item index="/log">登录/注册</el-menu-item>
-        <el-menu-item index="/article" v-if="username=='123'">管理员</el-menu-item>
-    </el-menu>
-  </div>
+        <el-menu-item index="/article" v-if="username == '123'"
+          >管理员</el-menu-item
+        >
+      </el-menu>
+    </div>
 
-  <el-container>
-    <transition
+    <el-container>
+      <!-- <transition
       mode="out-in"
       enter-active-class="animate__animated animate__fadeIn"
       leave-active-class="animate__animated animate__fadeOut"
-    >
+    > -->
       <router-view></router-view>
-    </transition>
-  </el-container>
-</div>
+      <!-- </transition> -->
+    </el-container>
+  </div>
 </template>
 
 <script>
@@ -57,7 +60,7 @@ export default {
     return {
       headImg: "../assets/headImg.JPG",
       activeIndex: "/",
-      username:Cookie.get('username')
+      username: Cookie.get("username"),
     };
   },
   methods: {
@@ -65,6 +68,14 @@ export default {
       console.log(key, keyPath);
     },
     mounted() {
+      let wow = new WOW.WOW({
+        boxClass: "wow",
+        animateClass: "animated",
+        offset: 0,
+        mobile: true,
+        live: false,
+      });
+      wow.init();
       this.$router.push({
         path: "/",
       });
@@ -93,15 +104,15 @@ export default {
       background: url(../assets/headImg.png) 50% / cover no-repeat;
       .headImg {
         width: 120px;
-        .el-image__inner {
+
+        .el-avatar {
           margin-top: 100px;
           width: 120px;
           height: 120px;
-          border-radius: 100%;
         }
         p {
           text-align: center;
-          font-size: 26px;
+          font-size: 32px;
           font-weight: 500;
           margin: 5px 0;
           color: #eee;
@@ -129,7 +140,7 @@ export default {
       a {
         text-decoration: none;
       }
-      .el-menu-item{
+      .el-menu-item {
         font-size: 16px;
       }
     }
