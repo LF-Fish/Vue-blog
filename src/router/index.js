@@ -50,44 +50,44 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
       },
-      {
-        path: '/article',
-        name: 'article',
-        component: article,
-        meta: {
-          // 需要登录权限
-          requireAuth: true
-        }
-      },
-      {
-        path: '/editArticle/:id?',
-        name: 'editArticle',
-        component: editArticle,
-        meta: {
-          // 需要登录权限
-          requireAuth: true
-        }
-      },
-      {
-        path: '/bookEdit',
-        name: 'bookEdit',
-        component: bookEdit,
-        meta: {
-          // 需要登录权限
-          requireAuth: true
-        }
-      },
-      {
-        path: '/bookPublish/:id?',
-        name: 'bookPublish',
-        component: bookPublish,
-        meta: {
-          // 需要登录权限
-          requireAuth: true
-        }
-      },
     ],
   },
+    {
+      path: '/article',
+      name: 'article',
+      component: article,
+      meta: {
+        // 需要登录权限
+        requireAuth: true
+      }
+    },
+    {
+      path: '/editArticle/:id?',
+      name: 'editArticle',
+      component: editArticle,
+      meta: {
+        // 需要登录权限
+        requireAuth: true
+      }
+    },
+    {
+      path: '/bookEdit',
+      name: 'bookEdit',
+      component: bookEdit,
+      meta: {
+        // 需要登录权限
+        requireAuth: true
+      }
+    },
+    {
+      path: '/bookPublish/:id?',
+      name: 'bookPublish',
+      component: bookPublish,
+      meta: {
+        // 需要登录权限
+        requireAuth: true
+      }
+    },
 ]
 
 const router = new VueRouter({
@@ -111,7 +111,7 @@ router.beforeEach((to, from, next) => {
   store.commit('setToken', Cookie.get('token'))
 
   //  判断有无token，有则设置当前状态为登录状态
-  if (store.state.token) {
+  if (Cookie.get('token')) {
     store.commit('changIsSignIn', 1)
   }
   //  先判断去的页面是否需要登录权限

@@ -2,6 +2,7 @@
     <div class="wrapper">
         <h1 class="title">文章列表</h1>
         <div class="article">
+            <el-button class="addBtn" @click="back">返回</el-button>
             <el-button class="addBtn" @click="handleAdd">新增+</el-button>
              <el-button class="addBtn" @click="toBook">新增书单+</el-button>
             <el-table :data="articleList" border stripe>
@@ -40,6 +41,9 @@
             }
         },
         methods:{
+            back(){
+                this.$router.push({path:'/'})
+            },
             toBook(){
                  this.$router.push({name:'bookEdit'})
             },
@@ -94,7 +98,7 @@
                this.$http.get('/api/article/myList').then(res => {
                  console.log(res);
                  if(res.data.code === 0){
-                    this.articleList = res.data.data
+                    this.articleList = res.data.data.reverse()
                     console.log(this.articleList);
                  }
                })

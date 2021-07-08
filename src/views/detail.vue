@@ -21,14 +21,6 @@
       </div>
       <el-backtop></el-backtop>
     </div>
-    <!-- <div class="right">
-      <div class="navi-floder">
-        <div class="navi-floder-title">文章目录</div>
-        <div class="catalog">
-          <side-catalog class="catalog" v-bind="catalogProps"></side-catalog>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -66,7 +58,6 @@ export default {
   },
   created() {
     this.GetArticleDetail();
-    // this.generate_catalog();
   },
   methods: {
     async GetArticleDetail() {
@@ -76,6 +67,7 @@ export default {
       console.log(res);
       this.data = res.data.data;
       this.likeCount = res.data.like_count;
+      this.$children[0].$children[0].$forceUpdate();
     },
     addLike() {
       if (Cookie.get("token")) {
@@ -87,7 +79,6 @@ export default {
             article_id: this.$route.params.id,
           })
           .then((res) => {
-            console.log(res.data.data[0]);
             this.likeCount = res.data.data[0].like_count;
             this.isClick = false;
           });
@@ -105,41 +96,13 @@ export default {
       document.querySelector("#comment").scrollIntoView(true);
     },
     // 生成目录
-    generate_catalog() {
-      // 保证渲染成功
-      this.$nextTick(() => {
-        // const article_content = this.$refs["article"];
-        const article_content = document
-          .querySelector(".article")
-          .getElementsByTagName("a");
-        console.log(article_content);
-        // const nodes = ["H1", "H2", "H3"];
-        // let titles = [];
-        // var children = document.getElementsByClassName("catalog")  //获取子节点
-        // article_content.forEach((e, index) => {
-        //   children.appendchild(e)
-        //   // if (nodes.includes(e.nodeName)) {
-        //   //   const id = "_" + index;
-        //   //   e.setAttribute("id", id);
-        //   //   titles.push({
-        //   //     id: id,
-        //   //     title: e.innerHTML,
-        //   //     level: Number(e.nodeName.substring(1, 2)),
-        //   //     nodeName: e.nodeName,
-        //   //   });
-        //   // }
-
-        // });
-        this.catalog = article_content;
-      });
-    },
   },
 };
 </script>
 
 <style lang="less">
 .main {
-  margin-top: 10px;
+  margin-top: 40px;
   margin-bottom: 20px;
   display: flex;
 }
@@ -158,6 +121,7 @@ export default {
   bottom: 30px;
   margin-left: -120px;
   .suspendedItem {
+    background: #fff;
     position: relative;
     display: flex;
     align-items: center;

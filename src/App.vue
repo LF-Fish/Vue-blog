@@ -3,11 +3,20 @@
     <canvas id="Snow"></canvas>
 
     <router-view />
+    <div id="footer">
+      <div class="contanier">
+        <div class="copyRight">
+          <p>Copyright © www.lf-fish.co All Rights Reserved.</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
  <script>
+//  import footer from "../components/footer.vue";
 export default {
+  // conponents:{footer},
   // 雪花特效
   mounted() {
     (function () {
@@ -130,12 +139,19 @@ export default {
 };
 </script>
 
-<style>
-body{
-  background: linear-gradient(to right,rgb(233, 231, 231) 1px,transparent 1px),
-     linear-gradient(to bottom,rgb(243, 240, 240) 1px,transparent 1px);
-     background-repeat: repeat;/* 默认为 repeat */
-     background-size: 10px 10px;;
+<style lang="less">
+#app {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+body {
+  background: linear-gradient(to right, rgb(233, 231, 231) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(243, 240, 240) 1px, transparent 1px);
+  background-repeat: repeat; /* 默认为 repeat */
+  background-size: 10px 10px;
 }
 #Snow {
   position: fixed;
@@ -146,5 +162,18 @@ body{
   z-index: 99999;
 
   pointer-events: none;
+}
+#footer {
+  width: 100%;
+  margin-top: 50px;
+  background: #f0f0f0;
+  text-align: center;
+  color: #88888b;
+  padding: 10px 0 15px;
+  line-height: 18px;
+  // position: absolute;
+  flex: 0;
+  font-size: 12px;
+  bottom: 0;
 }
 </style>

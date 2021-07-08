@@ -38,7 +38,7 @@
               <i class="el-icon-goblet"></i>
               运行天数
             </span>
-            <span> {{ runDays }}天 </span>
+            <span> {{ day }}天 </span>
           </div>
         </el-card>
       </div>
@@ -92,7 +92,7 @@
         </div>
         <p class="hot">
           <span class="el-icon-thumb">点赞({{ item.like_count }})</span>
-          <span class="el-icon-view">阅读(100)</span>
+          <span class="el-icon-view">阅读({{item.visited}})</span>
         </p>
       </el-card>
 
@@ -135,7 +135,7 @@ export default {
       pageSize: 3,
       isShow: true,
       // 博客运行时间
-      runDays: 0,
+      day: 0,
     };
   },
   watch: {
@@ -155,11 +155,20 @@ export default {
       live: false,
     });
     wow.init();
-    let now = new Date().valueOf();
-    let nTime = now - 1617374874293;
-    this.runDays = Math.floor(nTime / 86400000);
+    this.runtime()
+    
   },
   methods: {
+    // 博客运行时间
+    runtime(){
+      // 初始时间，日/月/年 时:分:秒
+      const start = new Date("2021/7/3 0:00:00");
+      let nowTime = new Date();
+      let difference  = (nowTime.getTime()-start.getTime());
+      let oneDaysecond = 24*60*60*1000;
+      let d = difference/oneDaysecond;// 时间差 / 一天的毫秒数  = 天数
+       this.day  = Math.floor(d);//获取天数（向下取整）
+    },
     // 搜索文章
     async search(input) {
       let res = await this.$http.get("/api/article/typeList");

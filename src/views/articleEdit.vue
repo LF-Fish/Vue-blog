@@ -27,7 +27,7 @@
     <!-- 文章内容 -->
     <div class="edit_title">文章内容 (Markdown编辑器)</div>
     <div class="markdown">
-      <mavon-editor v-model="content" :toolbars="toolbars" />
+      <mavon-editor v-model="content"   />
     </div>
     <div class="save_btn">
       <el-button type="primary" @click="save">保存为技术文章</el-button>
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -91,6 +92,21 @@ export default {
     };
   },
   methods: {
+    $imgAdd(pos, $file) {
+      // 添加图片
+      // 第一步.将图片上传到服务器.
+      console.log(pos, $file);
+      // var formdata = new FormData();
+      // formdata.append("image", $file);
+      axios({
+        url: "http://localhost:3000/login/mdimg",
+        method: "post",
+        data: formdata,
+        headers: { "Content-Type": "multipart/form-data" },
+      }).then((url) => {
+        this.$refs.md.$img2Url(pos, url.data.filename);
+      });
+    },
     // 封面上传相关方法
     handleAvatarSuccess(res) {
       this.imageUrl = res.data;
@@ -227,8 +243,8 @@ export default {
 
 <style lang="less">
 .edit_wrap {
-  margin: 30px auto;
-//   background-color: #fff;
+  margin: 30px 100px;
+  //   background-color: #fff;
   padding: 40px;
   font-size: 16px;
   .backBtn {

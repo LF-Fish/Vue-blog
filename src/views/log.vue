@@ -87,8 +87,16 @@
       </div>
       <p>{{ this.nickname }}</p>
       <p>你好,你已登录快去评论吧~</p>
-      <el-button type="danger" plain @click="update" style="margin-bottom:20px">保存</el-button>
-      <el-button type="danger" plain @click="exit">退出登录</el-button>
+      <div class="btn">
+        <el-button
+          type="danger"
+          plain
+          @click="update"
+          style="margin-bottom: 20px"
+          >保存</el-button
+        >
+        <el-button type="danger" style="margin-bottom: 20px" plain @click="exit">退出登录</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -146,7 +154,7 @@ export default {
     };
   },
   methods: {
-     // 封面上传相关方法
+    // 封面上传相关方法
     handleAvatarSuccess(res) {
       this.imageUrl = res.data;
     },
@@ -190,11 +198,11 @@ export default {
             this.$store.commit("changIsSignIn", 1);
             // 设置cookie
             Cookie.set("token", res.data.token);
-            Cookie.set("username",this.ruleForm.name );
+            Cookie.set("username", this.ruleForm.name);
             // 修改vuex的token
             this.$store.commit("setToken", res.data.token);
             console.log(this.$store.state.token);
-            this.GetInfo()
+            this.GetInfo();
 
             this.$message({
               message: "登录成功，将跳转首页",
@@ -254,7 +262,7 @@ export default {
     exit() {
       // 清除Cookie
       Cookie.set("token", "");
-       Cookie.set("username", "");
+      Cookie.set("username", "");
       // 清除sessionStorage
       sessionStorage.clear();
       this.$router.push({ path: "/" });
@@ -268,14 +276,14 @@ export default {
         this.imageUrl = res.data.data.head_img;
       });
     },
-    async update(){
-      await this.$http.post('/api/users/updateUser',{
-          nickname:this.nickname,
-          head_img:this.imageUrl
-        })
-        // 刷新页面
-        location.reload();
-      }
+    async update() {
+      await this.$http.post("/api/users/updateUser", {
+        nickname: this.nickname,
+        head_img: this.imageUrl,
+      });
+      // 刷新页面
+      location.reload();
+    },
   },
   created() {
     if (this.$store.state.isSignIn == 1) this.GetInfo();
@@ -347,6 +355,9 @@ export default {
     filter: blur(20px);
     z-index: -1;
     margin: -30px;
+  }
+  .btn{
+    display: flex;
   }
 }
 </style>
