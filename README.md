@@ -12,7 +12,7 @@
 技术栈的话因为我才对vue进行一个入门的学习，正好选用vue也可以对之前的学习做一个实践性的巩固。而后端呢，因为还未深入的学习，所以后端主要是通过其他博客的源码进行配置。
 主要技术有
 
-前端：`Vue-Cil` `Element ui` `VueX` `Vue router` `Less` `axios`
+前端：`Vue-Cli` `Element ui` `VueX` `Vue router` `Less` `axios`
 
 后端：`Nodejs` `Express` `MySQL`
 ## 3.主要功能
