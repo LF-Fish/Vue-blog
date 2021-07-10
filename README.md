@@ -28,7 +28,15 @@
 目前是对文章和书单进行管理，主要操作包括查看详细内容、修改更新、删除的操作，永远离不开的增删改查。
 `ps:一次偶然中发现删除文章时没有将数据库中标签一并删除，考虑到相同标签的数量原因，之后会增加文章标签的管理，对一些不需要的标签进行手动删除。`
 
-## 效果图可在imageFile文件中查看
+## 效果图
+![首页](https://img-blog.csdnimg.cn/20210709124105754.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NjAxODcyNg==,size_16,color_FFFFFF,t_70#pic_center)
+
+![博文归档](https://img-blog.csdnimg.cn/20210709124137700.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NjAxODcyNg==,size_16,color_FFFFFF,t_70#pic_center)
+
+![书籍分享](https://img-blog.csdnimg.cn/20210709124214898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NjAxODcyNg==,size_16,color_FFFFFF,t_70#pic_center)
+
+![个人信息](https://img-blog.csdnimg.cn/2021070912422872.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NjAxODcyNg==,size_16,color_FFFFFF,t_70#pic_center)
+
 ## Project setup
 ```
 npm install
