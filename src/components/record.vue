@@ -28,9 +28,10 @@ export default {
     };
   },
   methods: {
-    start() {
+    async start() {
       let recordAudio = this.$refs.audioRef; //获取audio元素
       console.log(recordAudio);
+      await recordAudio.load()
       this.playing ? this.pause() : this.play();
     },
     // 播放音频

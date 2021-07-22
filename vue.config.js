@@ -16,7 +16,7 @@ module.exports = {
             config.mode = 'production'
             return {
                 plugins: [new CompressionPlugin({
-                    test: /\.js$|\.html$|\.css/, //匹配文件名
+                    test: /\.js$|\.html$|\.css$|\.mp3/, //匹配文件名
                     threshold: 10240, //对超过10k的数据进行压缩
                     deleteOriginalAssets: false //是否删除原文件
                 })]
