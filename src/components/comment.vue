@@ -15,7 +15,7 @@
         <el-button class="submit" @click="SendComment()">提交</el-button>
       </div>
 
-      <ul v-if="isEmpty == false">
+      <ul>
         <li
           class="commentItem"
           v-for="(item, index) in commentArray"
@@ -24,8 +24,15 @@
           <div class="avator">{{ item.nickname | name() }}</div>
           <div class="content">
             <div class="info">
-              <div class="name el-icon-user-solid" v-if="item.nickname === '罗废鱼'">{{ item.nickname }}</div>
-              <div class="name" v-if="item.nickname != '罗废鱼'"> {{ item.nickname }}</div>
+              <div
+                class="name el-icon-user-solid"
+                v-if="item.nickname === '罗废鱼'"
+              >
+                {{ item.nickname }}
+              </div>
+              <div class="name" v-if="item.nickname != '罗废鱼'">
+                {{ item.nickname }}
+              </div>
               <div class="time">{{ item.create_time }}</div>
             </div>
             <div class="detail">{{ item.cmcontent }}</div>
@@ -51,7 +58,7 @@
 <script>
 import Cookie from "js-cookie";
 export default {
-  inject:['reload'],
+  inject: ["reload"],
   props: ["articleId"],
   filters: {
     name(str) {
@@ -64,7 +71,7 @@ export default {
       textarea: "",
       commentArray: [],
       isEmpty: false,
-      username :Cookie.get("username")
+      username: Cookie.get("username"),
     };
   },
   methods: {
@@ -105,15 +112,13 @@ export default {
         });
     },
     async GetArticleComment() {
-      if (this.articleId) {
+      // if (this.articleId) {
         let res = await this.$http.get("/api/comment/list", {
-          params: { article_id: this.articleId },
+          params: { article_id: this.articleId ? this.articleId : 0, },
         });
         this.commentArray = res.data.data.reverse();
-        console.log(res);
-      } else {
-        this.isEmpty = true;
-      }
+        if (this.commentArray.length == 0) this.isEmpty = true;
+ 
     },
     SendComment() {
       if (Cookie.get("token")) {
@@ -163,7 +168,7 @@ export default {
   }
 }
 .reply {
-  padding: 0 25px;
+  padding: 0 50px;
   display: flex;
   align-items: center;
   // justify-content: start;
@@ -175,7 +180,7 @@ export default {
     color: #666;
   }
   .submit {
-    margin-right: 50px;
+    // margin-right: 50px;
     color: #fff;
     font-size: 15px;
     width: 60px;

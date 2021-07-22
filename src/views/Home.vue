@@ -27,34 +27,34 @@
         >管理员</el-menu-item
       >
     </el-menu>
+    <!-- 音乐播放器 -->
+    <record></record>
     <!-- 封面 -->
-    <div class="header">
-      <div class="banner wow zoomIn">
-        <!-- 头像 -->
-        <div class="headImg wow fadeInUp">
-          <span>🐠</span>
-          <p>罗非鱼海鲜批发市场</p>
-        </div>
-      </div>
-    </div>
-
+    <banner v-if="$route.path != '/about'"></banner>
     <el-container>
       <router-view></router-view>
-      <footer></footer>
     </el-container>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
-
 import WOW from "wowjs";
+import Footer from "../components/footer.vue";
+import banner from "../components/banner.vue";
+import record from "../components/record.vue";
 import Cookie from "js-cookie";
 export default {
-  
+  components: {
+    Footer,
+    banner,
+    record
+  },
   data() {
     return {
       activeIndex: "/",
       username: Cookie.get("username"),
+      oldScrollTop: 0,
     };
   },
   methods: {
@@ -68,12 +68,12 @@ export default {
         document.documentElement.scrollTop ||
         document.body.scrollTop;
       const headerDom = document.getElementById("header");
-      // 导航高度
-      // let navHeight = headerDom.offsetHeight
-      // console.log(navHeight)
+      let scrollStep = scrollTop - this.oldScrollTop;
+      // 更新——滚动前，滚动条距文档顶部的距离
+      this.oldScrollTop = scrollTop;
 
-      // 当滚动高度大于版头高度时隐藏
-      if (scrollTop >= 520) {
+      // 向下滚动隐藏导航栏
+      if (scrollStep > 0) {
         if (!headerDom.getAttribute("class").includes("not-top")) {
           headerDom.className = "header-container not-top"; // 添加类名 css里设置动画
         }
@@ -81,6 +81,9 @@ export default {
         headerDom.className = "header-container";
       }
     },
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.handleScroll, false);
   },
   mounted() {
     let wow = new WOW.WOW({
@@ -91,17 +94,14 @@ export default {
       live: false,
     });
     wow.init();
-    window.addEventListener("scroll", this.handleScroll, true);
-  },
-  beforeDestroy() {
-    window.removeEventListener("scroll", this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll, false);
   },
 };
 </script>
 
 <style lang="less">
 #app {
-   .header-container{
+  .header-container {
     width: 100%;
     margin: auto;
     display: flex;
@@ -110,7 +110,7 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 12;
+    z-index: 1999;
     backdrop-filter: blur(4px);
     background-color: rgba(0, 0, 0, 0.2);
     transition: all 0.7s ease;
@@ -139,39 +139,6 @@ export default {
     border-top: 2px solid rgb(219, 165, 183);
     font-weight: 600;
     background-color: rgba(231, 230, 230, 0.1);
-  }
-
-  .header {
-    width: 1200px;
-    margin: auto;
-    .banner {
-      // border-radius: 10px;
-      background-color: white;
-      display: flex;
-      justify-content: center;
-      margin: auto;
-      height: 580px;
-      width: 100%;
-      background: url("../assets/headImg.png") 50% / cover no-repeat;
-      .headImg {
-        // width: 120px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        span {
-          font-size: 64px;
-        }
-
-        p {
-          text-align: center;
-          font-size: 32px;
-          font-weight: 500;
-          margin: 5px 0;
-          color: #eee;
-        }
-      }
-    }
   }
 }
 .el-container {

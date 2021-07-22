@@ -27,14 +27,14 @@
             <span><i class="el-icon-coffee"></i>博客信息</span>
           </div>
           <div class="ItemList">
-            <span class="left">
+            <span>
               <i class="el-icon-coffee-cup"></i>
               文章总数
             </span>
             <span> {{ count }}篇 </span>
           </div>
           <div class="ItemList">
-            <span class="left">
+            <span>
               <i class="el-icon-goblet"></i>
               运行天数
             </span>
@@ -86,21 +86,18 @@
             </div>
           </router-link>
         </div>
-        <!-- @click="GotoArticleDetail(item.id)" -->
+
         <div class="text item">
           {{ item.content }}
         </div>
         <p class="hot">
           <span class="el-icon-thumb">点赞({{ item.like_count }})</span>
-          <span class="el-icon-view">阅读({{item.visited}})</span>
+          <span> 阅读({{ item.visited }})</span>
         </p>
       </el-card>
 
       <!-- 分页 -->
       <div class="block">
-        <!-- <span class="demonstration" style="padding-left: 10px"
-          >共{{ count/pageSize }}页</span
-        > -->
         <el-pagination
           v-if="isShow == true"
           :current-page.sync="currentPage"
@@ -132,16 +129,11 @@ export default {
       likes: [],
       // 所以文章分类
       AllArticleClassName: [],
-      pageSize: 3,
+      pageSize: 4,
       isShow: true,
       // 博客运行时间
       day: 0,
     };
-  },
-  watch: {
-    key(val) {
-      alert(val);
-    },
   },
   created() {
     this.GetAllArticle(this.currentPage, this.pageSize);
@@ -155,19 +147,18 @@ export default {
       live: false,
     });
     wow.init();
-    this.runtime()
-    
+    this.runtime();
   },
   methods: {
     // 博客运行时间
-    runtime(){
+    runtime() {
       // 初始时间，日/月/年 时:分:秒
       const start = new Date("2021/7/3 0:00:00");
       let nowTime = new Date();
-      let difference  = (nowTime.getTime()-start.getTime());
-      let oneDaysecond = 24*60*60*1000;
-      let d = difference/oneDaysecond;// 时间差 / 一天的毫秒数  = 天数
-       this.day  = Math.floor(d);//获取天数（向下取整）
+      let difference = nowTime.getTime() - start.getTime();
+      let oneDaysecond = 24 * 60 * 60 * 1000;
+      let d = difference / oneDaysecond; // 时间差 / 一天的毫秒数  = 天数
+      this.day = Math.floor(d); //获取天数（向下取整）
     },
     // 搜索文章
     async search(input) {
@@ -177,10 +168,10 @@ export default {
         return item.title.indexOf(input) > -1;
       });
       this.isShow = false;
-      console.log(this.AllArticle);
+      // console.log(this.AllArticle);
     },
     GotoArticleDetail(id) {
-      console.log(id);
+      // console.log(id);
       this.$router.push({ name: "Detail", params: { id } });
     },
     indexChange(index) {
@@ -205,7 +196,7 @@ export default {
         this.AllArticle = res.data.data;
         this.count = res.data.coust;
         this.$store.commit("setCount", this.count);
-        console.log(res);
+        // console.log(res);
       }
 
       // 截取时间
@@ -220,7 +211,6 @@ export default {
       let res = await this.$http.get("/api/article/classify");
 
       this.AllArticleClassName = res.data.data;
-      console.log(res);
       // 去除空字符
       for (var i = 0; i < this.AllArticleClassName.length; i++) {
         if (this.AllArticleClassName[i].classname == "") {
@@ -284,7 +274,7 @@ export default {
           cursor: pointer;
           color: #555;
           border-bottom: 1px solid #ebeef5;
-          transition: all 0.6s;
+          // transition: all 0.6s;
           font-size: 13px;
           display: flex;
           justify-content: space-between;
@@ -314,7 +304,7 @@ export default {
         margin-top: 20px;
         margin-bottom: 20px;
         .el-input__inner {
-          border: 1px solid #8a8a8a;
+          border: 1px solid #f7d3d3;
         }
       }
 
@@ -352,13 +342,15 @@ export default {
         .el-card__body {
           margin: 0;
           width: 100%;
+          box-sizing: border-box;
           .text {
-            width: 450px;
             overflow: hidden;
             display: -webkit-box;
+            word-break: break-all;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 3;
             font-size: 14px;
+            -webkit-overflow-scrolling: touch;
           }
           .hot {
             color: #999;
@@ -384,7 +376,7 @@ export default {
         color: #8a8a8a;
       }
     }
-    .el-main ::before,
+    // .el-main ::before,
     .box-card ::before {
       content: "";
       position: absolute;

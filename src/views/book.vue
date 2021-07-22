@@ -14,8 +14,6 @@
           </p>
         </div>
       </div>
-
-      ...more...
     </div>
   </div>
 </template>
@@ -59,30 +57,33 @@ export default {
   margin-top: 20px;
 }
 .masonry {
-  // width: 1440px; // 默认宽度
   margin: auto; // 剧中
   columns: 3; // 默认列数
-  column-gap: 30px; // 列间距
+  // column-gap: 30px; // 列间距
   background-color: #fff;
-  padding: 20px;
+  padding: 30px 0;
   .item {
     transition: all 0.5s ease;
+    box-sizing: border-box;
     border-right: 1px dashed #c9c9c9;
     padding: 10px;
     padding-top: 20px;
     width: 100%;
     break-inside: avoid;
     margin-bottom: 30px;
+
     .bookImg {
       text-align: center;
       padding-bottom: 10px;
     }
     .info {
-      padding-left: 20px;
+      box-sizing: border-box;
+      padding: 0 20px;
       .title {
         font-weight: 700;
         font-size: 15px;
-        margin-bottom: 5px;
+        text-align: left;
+        margin: 10px 0;
       }
       .author {
         font-size: 12px;
@@ -91,6 +92,7 @@ export default {
       }
       .content {
         font-size: 13px;
+        text-align: justify;
       }
     }
     img {

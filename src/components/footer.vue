@@ -1,12 +1,11 @@
 <template>
-<div class="footer">
-  <div class="contanier">
-    <div class="line"></div>
-    <div class="copyRight">
-      <p>Copyright © www.lf-fish.co All Rights Reserved.</p>
+    <div class="footer">
+      <div class="contanier">
+        <div class="copyRight">
+          <p>Copyright © www.lf-fish.co All Rights Reserved.</p>
+        </div>
+      </div>
     </div>
-  </div>
-  </div>
 </template>
 
 <style lang="less">
@@ -18,7 +17,7 @@
   color: #88888b;
   padding: 10px 0 15px;
   line-height: 18px;
-  position: relative;
+  flex: 0;
   font-size: 12px;
   bottom: 0;
 }

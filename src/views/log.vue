@@ -18,7 +18,7 @@
             v-model.number="ruleForm.name"
           ></el-input>
         </el-form-item>
-        <el-form-item label="昵称" prop="id" v-if="status == 2">
+        <el-form-item label="昵称" prop="username" v-if="status == 2">
           <el-input
             prefix-icon="el-icon-user-solid"
             v-model.number="ruleForm.nickname"
@@ -190,7 +190,6 @@ export default {
             password: this.ruleForm.password,
           };
           let res = await this.$http.post("/api/users/login", data);
-          console.log(res);
           if (res.data.code == -1) {
             this.open2();
           } else {
@@ -201,7 +200,7 @@ export default {
             Cookie.set("username", this.ruleForm.name);
             // 修改vuex的token
             this.$store.commit("setToken", res.data.token);
-            console.log(this.$store.state.token);
+            // console.log(this.$store.state.token);
             this.GetInfo();
 
             this.$message({
@@ -210,7 +209,7 @@ export default {
             });
             setTimeout(() => {
               this.$router.push({ name: "Index" });
-            }, 3000);
+            }, 2000);
           }
         } else {
           this.open1();
@@ -271,10 +270,10 @@ export default {
     GetInfo() {
       this.$http.get("/api/users/info").then((res) => {
         //  获取用户头像地址
-        console.log(res);
+        // console.log(res);
         this.nickname = res.data.data.nickname;
         this.imageUrl = res.data.data.head_img;
-      });
+      })
     },
     async update() {
       await this.$http.post("/api/users/updateUser", {
@@ -322,6 +321,8 @@ export default {
     }
   }
   .isSignIn {
+    
+    border: 1px solid #EBEEF5;
     padding: 30px;
     margin: 30px auto;
     // height: 100px;

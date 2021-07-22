@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Cookies from 'js-cookie';
 import store from '../store/index'
-axios.defaults.baseURL = 'http://47.100.96.223:8888/';
+axios.defaults.baseURL = 'http://106.14.238.126:8888/';
 export default function setAxios() {
   //请求拦截
   axios.interceptors.request.use(

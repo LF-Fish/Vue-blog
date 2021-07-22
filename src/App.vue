@@ -3,20 +3,11 @@
     <canvas id="Snow"></canvas>
 
     <router-view />
-    <div id="footer">
-      <div class="contanier">
-        <div class="copyRight">
-          <p>Copyright © www.lf-fish.co All Rights Reserved.</p>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
  <script>
-//  import footer from "../components/footer.vue";
 export default {
-  // conponents:{footer},
   // 雪花特效
   mounted() {
     (function () {
@@ -37,13 +28,10 @@ export default {
         flakeCount = 50,
         mX = -100,
         mY = -100;
-
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-
       function snow() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
         for (var i = 0; i < flakeCount; i++) {
           var flake = flakes[i],
             x = mX,
@@ -51,17 +39,14 @@ export default {
             minDist = 150,
             x2 = flake.x,
             y2 = flake.y;
-
           var dist = Math.sqrt((x2 - x) * (x2 - x) + (y2 - y) * (y2 - y)),
             dx = x2 - x,
             dy = y2 - y;
-
           if (dist < minDist) {
             var force = minDist / (dist * dist),
               xcomp = (x - x2) / dist,
               ycomp = (y - y2) / dist,
               deltaV = force / 2;
-
             flake.velX -= deltaV * xcomp;
             flake.velY -= deltaV * ycomp;
           } else {
@@ -71,26 +56,21 @@ export default {
             }
             flake.velX += Math.cos((flake.step += 0.05)) * flake.stepSize;
           }
-
           ctx.fillStyle = "rgba(255,255,255," + flake.opacity + ")";
           flake.y += flake.velY;
           flake.x += flake.velX;
-
           if (flake.y >= canvas.height || flake.y <= 0) {
             reset(flake);
           }
-
           if (flake.x >= canvas.width || flake.x <= 0) {
             reset(flake);
           }
-
           ctx.beginPath();
           ctx.arc(flake.x, flake.y, flake.size, 0, Math.PI * 2);
           ctx.fill();
         }
         requestAnimationFrame(snow);
       }
-
       function reset(flake) {
         flake.x = Math.floor(Math.random() * canvas.width);
         flake.y = 0;
@@ -100,7 +80,6 @@ export default {
         flake.velX = 0;
         flake.opacity = Math.random() * 0.5 + 0.3;
       }
-
       function init() {
         for (var i = 0; i < flakeCount; i++) {
           var x = Math.floor(Math.random() * canvas.width),
@@ -108,7 +87,6 @@ export default {
             size = Math.random() * 3 + 2,
             speed = Math.random() * 1 + 0.5,
             opacity = Math.random() * 0.5 + 0.3;
-
           flakes.push({
             speed: speed,
             velY: speed,
@@ -122,10 +100,8 @@ export default {
             opacity: opacity,
           });
         }
-
         snow();
       }
-
       document.addEventListener("mousemove", function (e) {
         (mX = e.clientX), (mY = e.clientY);
       });
@@ -160,20 +136,6 @@ body {
   width: 100%;
   height: 100%;
   z-index: 99999;
-
   pointer-events: none;
-}
-#footer {
-  width: 100%;
-  margin-top: 50px;
-  background: #f0f0f0;
-  text-align: center;
-  color: #88888b;
-  padding: 10px 0 15px;
-  line-height: 18px;
-  // position: absolute;
-  flex: 0;
-  font-size: 12px;
-  bottom: 0;
 }
 </style>

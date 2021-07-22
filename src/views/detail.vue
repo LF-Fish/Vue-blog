@@ -64,7 +64,7 @@ export default {
       let res = await this.$http.get("/api/article/detail", {
         params: { article_id: this.id },
       });
-      console.log(res);
+      // console.log(res);
       this.data = res.data.data;
       this.likeCount = res.data.like_count;
       this.$children[0].$children[0].$forceUpdate();
@@ -95,7 +95,6 @@ export default {
     toComment() {
       document.querySelector("#comment").scrollIntoView(true);
     },
-    // 生成目录
   },
 };
 </script>
@@ -103,11 +102,11 @@ export default {
 <style lang="less">
 .main {
   margin-top: 40px;
-  margin-bottom: 20px;
   display: flex;
 }
 .left {
   background-color: #fff;
+  padding-bottom: 50px;
 }
 .right {
   margin-left: 30px;
@@ -139,7 +138,6 @@ export default {
       transition: all 0.5s ease;
       .icon :hover {
         color: brown;
-        // background-color: brown;
       }
     }
 

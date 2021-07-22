@@ -3,44 +3,34 @@ import VueRouter from 'vue-router'
 import store from '../store'
 import Cookie from 'js-cookie'
 
-import Home from '../views/Home.vue'
-import Log from '../views/log.vue'
-import Index from '../views/index.vue'
-import Book from '../views/book.vue'
-import Detail from '../views/detail.vue'
-import editArticle from '../views/articleEdit.vue'
-import article from '../views/article.vue'
-import bookEdit from '../views/bookEdit.vue'
-import bookPublish from '../views/bookPublish.vue'
-
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    component: () => import('../views/Home.vue'),
     children: [
       {
         path: '/',
         name: 'Index',
-        component: Index,
+        component: () => import('../views/index.vue'),
 
       },
       {
         path: '/log',
         name: 'Log',
-        component: Log
+        component: () => import('../views/log.vue')
       },
       {
         path: '/book',
         name: 'Book',
-        component: Book
+        component: () => import('../views/book.vue')
       },
       {
         path: '/detail/:id',
         name: 'Detail',
-        component: Detail
+        component: () => import('../views/detail.vue')
       },
       {
         path: '/about',
@@ -52,42 +42,42 @@ const routes = [
       },
     ],
   },
-    {
-      path: '/article',
-      name: 'article',
-      component: article,
-      meta: {
-        // 需要登录权限
-        requireAuth: true
-      }
-    },
-    {
-      path: '/editArticle/:id?',
-      name: 'editArticle',
-      component: editArticle,
-      meta: {
-        // 需要登录权限
-        requireAuth: true
-      }
-    },
-    {
-      path: '/bookEdit',
-      name: 'bookEdit',
-      component: bookEdit,
-      meta: {
-        // 需要登录权限
-        requireAuth: true
-      }
-    },
-    {
-      path: '/bookPublish/:id?',
-      name: 'bookPublish',
-      component: bookPublish,
-      meta: {
-        // 需要登录权限
-        requireAuth: true
-      }
-    },
+  {
+    path: '/article',
+    name: 'article',
+    component: () => import('../views/admin/article.vue'),
+    meta: {
+      // 需要登录权限
+      requireAuth: true
+    }
+  },
+  {
+    path: '/editArticle/:id?',
+    name: 'editArticle',
+    component: () => import('../views/admin/articleEdit.vue'),
+    meta: {
+      // 需要登录权限
+      requireAuth: true
+    }
+  },
+  {
+    path: '/bookEdit',
+    name: 'bookEdit',
+    component: () => import('../views/admin/bookEdit.vue'),
+    meta: {
+      // 需要登录权限
+      requireAuth: true
+    }
+  },
+  {
+    path: '/bookPublish/:id?',
+    name: 'bookPublish',
+    component: ()=>import('../views/admin/bookPublish.vue'),
+    meta: {
+      // 需要登录权限
+      requireAuth: true
+    }
+  },
 ]
 
 const router = new VueRouter({
@@ -100,19 +90,17 @@ export default router
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
-  // 让页面回到顶部
-  window.pageYOffset = document.documentElement.scrollTop = 0
-  document.body.scrollTop = document.documentElement.scrollTop = 0;
-  scrollTo(0, 0);
-  document.documentElement.scrollTop = document.body.scrollTop = 0;
 
   // 刷新页面会丢失登录状态，所以刷新后要从Cookie里获取token再次存放在vuex
-  if(Cookie.get('token'))
-  store.commit('setToken', Cookie.get('token'))
+  if (Cookie.get('token'))
+    store.commit('setToken', Cookie.get('token'))
 
   //  判断有无token，有则设置当前状态为登录状态
   if (Cookie.get('token')) {
     store.commit('changIsSignIn', 1)
+  }
+  else {
+    store.commit('changIsSignIn', 0)
   }
   //  先判断去的页面是否需要登录权限
   if (to.meta.requireAuth) {
