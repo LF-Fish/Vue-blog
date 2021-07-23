@@ -13,7 +13,7 @@
         @play="onPlay"
         @pause="onPause"
       >
-        <source type="audio/mp3" src="../static/AKB48 - 桜の木になろう.mp3"/>
+        <source type="audio/mp3" :src='require("../static/AKB48 - 桜の木になろう.mp3")'/>
       </audio>
     </div>
   </div>
@@ -28,10 +28,10 @@ export default {
     };
   },
   methods: {
-    async start() {
+    start() {
       let recordAudio = this.$refs.audioRef; //获取audio元素
-      console.log(recordAudio);
-      await recordAudio.load()
+      // console.log(recordAudio);
+      // recordAudio.load()
       this.playing ? this.pause() : this.play();
     },
     // 播放音频
